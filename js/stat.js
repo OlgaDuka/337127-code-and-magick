@@ -42,14 +42,12 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Ура! Вы победили!', 120, 40);
   ctx.fillText('Список результатов:', 120, 65);
 
-  var max = -1;
-
-  for (var i = 0; i < times.length; i++) {
-    var time = times[i];
-    if (time > max) {
-      max = time;
+  var max = 0;
+  times.forEach(function (elem) {
+    if (max <= elem) {
+      max = elem;
     }
-  }
+  });
 
   var histogram = {
     height: 150,
@@ -66,14 +64,13 @@ window.renderStatistics = function (ctx, names, times) {
     transparency: 0.2
   };
 
-  for (i = 0; i < times.length; i++) {
+  for (var i = 0; i < times.length; i++) {
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'red';
     } else {
-      if (histogram.transparency < 1) {
-        histogram.transparency += 0.2;
-      } else {
-        histogram.transparency = 0.2;
+      histogram.transparency = Math.random();
+      if (histogram.transparency === 0) {
+        histogram.transparency = 0.5;
       }
       ctx.fillStyle = 'rgba(0, 0, 255, ' + histogram.transparency + ')';
     }
