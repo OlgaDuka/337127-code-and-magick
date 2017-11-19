@@ -49,6 +49,10 @@ window.renderStatistics = function (ctx, names, times) {
     }
   });
 
+  var getRandomValue = function (minValue, maxValue) {
+    return Math.random() * (maxValue - minValue) + minValue;
+  };
+
   var histogram = {
     height: 150,
     step: function () {
@@ -61,18 +65,13 @@ window.renderStatistics = function (ctx, names, times) {
       return histogram.height + 80;
     },
     lineHeight: 20,
-    transparency: 0.2
   };
 
   for (var i = 0; i < times.length; i++) {
     if (names[i] === 'Вы') {
       ctx.fillStyle = 'red';
     } else {
-      histogram.transparency = Math.random();
-      if (histogram.transparency === 0) {
-        histogram.transparency = 0.5;
-      }
-      ctx.fillStyle = 'rgba(0, 0, 255, ' + histogram.transparency + ')';
+      ctx.fillStyle = 'rgba(0, 0, 255, ' + getRandomValue(0.1, 1) + ')';
     }
     ctx.fillRect(histogram.initialX + histogram.indent * i, histogram.initialY(), histogram.barWidth, -(times[i] * histogram.step()));
     ctx.fillText(names[i], histogram.initialX + histogram.indent * i, histogram.initialY() + histogram.lineHeight);
