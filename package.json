@@ -13,10 +13,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "eslint": "4.2.0",
-    "eslint-config-htmlacademy": "0.3.x"
+    "eslint": "^4.2.0",
+    "eslint-config-htmlacademy": "^0.3.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "editorconfig": "^0.15.0"
+  },
   "scripts": {
     "test": "eslint js/"
   },
