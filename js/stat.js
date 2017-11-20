@@ -8,12 +8,15 @@ window.renderStatistics = function (ctx, names, times) {
     y2: 280,
     radius: 20
   };
-  var fieldShadow = {
-    x1: fieldFront.x1 + 10,
-    y1: fieldFront.y1 + 10,
-    x2: fieldFront.x2 + 10,
-    y2: fieldFront.y2 + 10,
-    radius: 20
+
+  var fieldShadow = {};
+
+  var fieldShadowValue = function (fieldObject, valueOffsetX, valueOffsetY) {
+    fieldShadow.x1 = fieldObject.x1 + valueOffsetX;
+    fieldShadow.y1 = fieldObject.y1 + valueOffsetY;
+    fieldShadow.x2 = fieldObject.x2 + valueOffsetX;
+    fieldShadow.y2 = fieldObject.y2 + valueOffsetY;
+    fieldShadow.radius = fieldObject.radius;
   };
 
   var fieldDrow = function (field) {
@@ -32,6 +35,7 @@ window.renderStatistics = function (ctx, names, times) {
   };
 
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  fieldShadowValue(fieldFront, 10, 5);
   fieldDrow(fieldShadow);
   ctx.fillStyle = 'rgba(255, 255, 255, 1)';
   fieldDrow(fieldFront);
