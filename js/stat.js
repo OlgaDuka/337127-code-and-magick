@@ -66,9 +66,11 @@ window.renderStatistics = function (ctx, names, times) {
     lineHeight: 20
   };
 
-  times.forEach(function (elem, i) {
+  var histogramDrow = function (elem, i) {
     ctx.fillStyle = (names[i] === 'Вы') ? 'red' : 'rgba(0, 0, 255, ' + getRandomValue(0.1, 1) + ')';
     ctx.fillRect(histogram.initialX + histogram.indent * i, histogram.initialY(), histogram.barWidth, -elem * histogram.step());
     ctx.fillText(names[i], histogram.initialX + histogram.indent * i, histogram.initialY() + histogram.lineHeight);
-  });
+  };
+
+  times.forEach(histogramDrow);
 };
