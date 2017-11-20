@@ -42,12 +42,7 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Ура! Вы победили!', 120, 40);
   ctx.fillText('Список результатов:', 120, 65);
 
-  var max = 0;
-  times.forEach(function (elem) {
-    if (max <= elem) {
-      max = elem;
-    }
-  });
+  var max = Math.max.apply(null, times);
 
   var getRandomValue = function (minValue, maxValue) {
     return Math.random() * (maxValue - minValue) + minValue;
