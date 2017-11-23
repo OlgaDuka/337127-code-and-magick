@@ -1,7 +1,7 @@
 'use strict';
 var WIZARD_FIRST_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var WIZARD_SUR_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var WIZARD_COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var WIZARD_COAT_COLORS = [[101, 137, 164], [241, 43, 107], [146, 100, 161], [56, 159, 117], [215, 210, 55], [0, 0, 0]];
 var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 
 var getRandomValueForArr = function (arr) {
@@ -25,7 +25,7 @@ var wizards = [];
 for (var i = 0; i < 4; i++) {
   wizards[i] = {
     name: generateName(),
-    coatColor: generateColor(WIZARD_COAT_COLORS),
+    coatColor: 'rgb(' + generateColor(WIZARD_COAT_COLORS) + ')',
     eyesColor: generateColor(WIZARD_EYES_COLORS),
   };
 }
