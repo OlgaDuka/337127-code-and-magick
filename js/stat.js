@@ -1,16 +1,45 @@
 'use strict';
 
 window.renderStatistics = function (ctx, names, times) {
+  // Константы
+  var WIDTH_FIELD = 420;
+  var HEIGHT_FIELD = 270;
+  var START_X = 100;
+  var START_Y = 10;
+  var RADIUS = 20;
+  var BAR_WIDTH = 40;
+  var HISTOGRAM_HEIGHT = 150;
+  var COLUMN_WIDTH = 40;
+  var COLUMN_MARGIN = 50;
+  var LINE_HEIGHT = 20;
+  // Переменные
+  // Объект Поле
   var fieldFront = {
-    x1: 100,
-    y1: 10,
-    x2: 520,
-    y2: 280,
-    radius: 20
+    x1: START_X,
+    y1: START_Y,
+    x2: START_X + WIDTH_FIELD,
+    y2: START_Y + HEIGHT_FIELD,
+    radius: RADIUS
+  };
+  // Объект Тень поля
+  var fieldShadow = {};
+  // Объект Столбик гистограммы
+  var histogram = {
+    height: HISTOGRAM_HEIGHT,
+    step: function () {
+      return HISTOGRAM_HEIGHT / Math.max.apply(null, times);
+    },
+    barWidth: BAR_WIDTH,
+    indent: COLUMN_WIDTH + COLUMN_MARGIN,
+    initialX: START_X + 20,
+    initialY: function () {
+      return HISTOGRAM_HEIGHT + 80;
+    },
+    lineHeight: LINE_HEIGHT
   };
 
-  var fieldShadow = {};
-
+  // Функции
+  // Создание объекта тени
   var fieldShadowValue = function (fieldObject, valueOffsetX, valueOffsetY) {
     fieldShadow.x1 = fieldObject.x1 + valueOffsetX;
     fieldShadow.y1 = fieldObject.y1 + valueOffsetY;
@@ -18,7 +47,7 @@ window.renderStatistics = function (ctx, names, times) {
     fieldShadow.y2 = fieldObject.y2 + valueOffsetY;
     fieldShadow.radius = fieldObject.radius;
   };
-
+  // Рисуем объект поля или тени
   var fieldDrow = function (field) {
     ctx.beginPath();
     ctx.moveTo(field.x1, field.y1 + field.radius);
@@ -33,44 +62,26 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.stroke();
     ctx.fill();
   };
-
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  fieldShadowValue(fieldFront, 10, 5);
-  fieldDrow(fieldShadow);
-  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-  fieldDrow(fieldFront);
-
-  ctx.fillStyle = '#000';
-  ctx.font = '16px PT Mono';
-
-  ctx.fillText('Ура! Вы победили!', 120, 40);
-  ctx.fillText('Список результатов:', 120, 65);
-
-  var max = Math.max.apply(null, times);
-
+  // Получение случайного значения
   var getRandomValue = function (minValue, maxValue) {
     return Math.random() * (maxValue - minValue) + minValue;
   };
-
-  var histogram = {
-    height: 150,
-    step: function () {
-      return histogram.height / max;
-    },
-    barWidth: 40,
-    indent: 90,
-    initialX: 120,
-    initialY: function () {
-      return histogram.height + 80;
-    },
-    lineHeight: 20
-  };
-
+  // Рисуем столбик гистограммы и подпись под ней
   var histogramDrow = function (elem, i) {
     ctx.fillStyle = (names[i] === 'Вы') ? 'red' : 'rgba(0, 0, 255, ' + getRandomValue(0.1, 1) + ')';
     ctx.fillRect(histogram.initialX + histogram.indent * i, histogram.initialY(), histogram.barWidth, -elem * histogram.step());
     ctx.fillText(names[i], histogram.initialX + histogram.indent * i, histogram.initialY() + histogram.lineHeight);
   };
 
+  // Реализация
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  fieldShadowValue(fieldFront, 10, 5);
+  fieldDrow(fieldShadow);
+  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+  fieldDrow(fieldFront);
+  ctx.fillStyle = '#000';
+  ctx.font = '16px PT Mono';
+  ctx.fillText('Ура! Вы победили!', 120, 40);
+  ctx.fillText('Список результатов:', 120, 65);
   times.forEach(histogramDrow);
 };
