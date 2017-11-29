@@ -48,6 +48,68 @@ wizards.forEach(function (elem) {
 });
 // Добавляем фрагмент на страницу
 similarListElement.appendChild(fragment);
-// Делаем видимым диалог
-userDialog.classList.remove('hidden');
-userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+// =========================================================
+// Обработка событий
+
+// Константы
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
+// Переменные
+var setupOpen = document.querySelector('.setup-open');
+var setup = document.querySelector('.setup');
+var setupClose = setup.querySelector('.setup-close');
+var userNameInput = setup.querySelector('.setup-user-name');
+
+// Функции
+// Реакция на нажатие ESC
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+// Открыть окно настроек
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+// Закрыть окно настроек
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// Обработчики
+// Открытие окна настроек по нажатию мышки
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+// Открытие окна настроек с клавиатуры
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+});
+// Закрытие окна настроек по нажатию мышки
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+// Закрытие окна настроек с клавиатуры
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
+// Валидация ввода имени персонажа
+userNameInput.addEventListener('invalid', function () {
+  if (userNameInput.validity.tooShort) {
+    userNameInput.setCustomValidity('Имя должно состоять минимум из 2-х символов');
+  } else if (userNameInput.validity.tooLong) {
+    userNameInput.setCustomValidity('Имя не должно превышать 25-ти символов');
+  } else if (userNameInput.validity.valueMissing) {
+    userNameInput.setCustomValidity('Обязательное поле');
+  } else {
+    userNameInput.setCustomValidity('');
+  }
+});
