@@ -79,13 +79,13 @@ var fireball = setup.querySelector('.setup-fireball-wrap');
 // Реакция на нажатие ESC
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
+    closePopup(evt);
   }
 };
 // Реакция на нажатие ENTER, когда кнопка закрытия в фокусе
 var onPopupEnterPress = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
-    closePopup();
+    closePopup(evt);
   }
 };
 // Открыть окно настроек
@@ -98,7 +98,7 @@ var openPopup = function (evt) {
 };
 // Закрыть окно настроек
 var closePopup = function (evt) {
-  if (evt && evt.type === 'click' || evt.keyCode === ENTER_KEYCODE) {
+  if (evt && evt.type === 'click' || evt.keyCode === ESC_KEYCODE || evt.keyCode === ENTER_KEYCODE) {
     setup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   }
