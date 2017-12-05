@@ -16,6 +16,11 @@ window.setup = (function () {
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
   var fragment = document.createDocumentFragment();
+  var shop = document.querySelector('.setup-artifacts-shop');
+  var draggedItem = null;
+  var draggedItemCopy = null;
+  var artifactsBag = document.querySelector('.setup-artifacts');
+
 
   // Функции
   // Получение случайного целого значения
@@ -41,6 +46,49 @@ window.setup = (function () {
     wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
     return wizardElement;
   };
+
+  // Обработка событий
+  // при перетаскивании артефактов из магазина в рюкзачок
+  // Функции
+  // Сообщим магазину, что мы у него утащили (alt в разметке)
+  var onShopDragstart = function (evt) {
+    if (evt.target.tagName.toLowerCase() === 'img') {
+      draggedItem = evt.target;
+      draggedItemCopy = draggedItem.cloneNode(true);
+      evt.dataTransfer.setData('text/plain', evt.target.alt);
+    }
+  };
+  // Разрешим браузеру перетаскивать звезды в рюкзачок
+  var onArtifactDragover = function (evt) {
+    evt.preventDefault();
+    return false;
+  };
+  // Событие бросить - добавляем элемент в цель
+  var onArtifactDrop = function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.target.style.outline = '';
+    evt.target.appendChild(draggedItemCopy);
+    evt.preventDefault();
+  };
+  // Событие "элемент над целью" - красим цель в желтый
+  var onArtifactDragenter = function (evt) {
+    evt.target.style.backgroundColor = 'yellow';
+    evt.target.style.outline = '2px dashed red';
+    evt.preventDefault();
+  };
+  // Событие "элемент покидает цель" - цвет убираем
+  var onArtifactDragleave = function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.target.style.outline = '';
+    evt.preventDefault();
+  };
+
+  // Обработчики событий
+  shop.addEventListener('dragstart', onShopDragstart);
+  artifactsBag.addEventListener('dragover', onArtifactDragover);
+  artifactsBag.addEventListener('drop', onArtifactDrop);
+  artifactsBag.addEventListener('dragenter', onArtifactDragenter);
+  artifactsBag.addEventListener('dragleave', onArtifactDragleave);
 
   // Реализация
   // Заполняем данными массив объектов магов
