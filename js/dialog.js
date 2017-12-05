@@ -10,6 +10,11 @@ window.dialog = (function () {
   var userWizardCoat = userWizard.querySelector('.wizard-coat');
   var userWizardEyes = userWizard.querySelector('.wizard-eyes');
   var fireball = setup.querySelector('.setup-fireball-wrap');
+  var setupHandle = setup.querySelector('.setup-user-pic');
+  var setupOpenCoord = {
+    x: setup.style.top,
+    y: setup.style.left
+  };
 
   // Функции
   // Реакция на нажатие ESC
@@ -22,6 +27,8 @@ window.dialog = (function () {
   };
   // Открыть окно настроек
   var openPopup = function () {
+    setup.style.top = setupOpenCoord.x;
+    setup.style.left = setupOpenCoord.y;
     setup.classList.remove('hidden');
     setupList.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
@@ -43,36 +50,62 @@ window.dialog = (function () {
       userNameInput.setCustomValidity('');
     }
   };
-  //
+  // Покраска инвентаря
   var onCoatClick = function () {
     window.setup.getColorCoat(userWizardCoat);
   };
-
   var onEyesClick = function () {
     window.setup.getColorEyes(userWizardEyes);
   };
-
   var onFireballClick = function () {
     window.setup.getColorFireball(fireball);
   };
+  // Таскаем окно
+  var onHandleMousedown = function (evt) {
+    evt.preventDefault();
+    // Начальные координаты
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+    // Отслеживаем перемещение мыши
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+      setup.style.top = (setup.offsetTop - shift.y) + 'px';
+      setup.style.left = (setup.offsetLeft - shift.x) + 'px';
+    };
+    // Убираем слежение за событиями при отпускании мыши
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+    // Обработаем события движения и отпускания мыши
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  };
+
   // Обработчики
   // 1.
   // Открытие окна настроек по нажатию мышки
   setupOpen.addEventListener('click', openPopup);
-
   // Открытие окна настроек с клавиатуры
   setupOpen.addEventListener('keydown', openPopup);
-
   // Закрытие окна настроек по нажатию мышки
   setupClose.addEventListener('click', closePopup);
-
   // Закрытие окна настроек с клавиатуры
   setupClose.addEventListener('keydown', onPopupEnterPress);
-
   // 2.
   // Валидация ввода имени персонажа
   userNameInput.addEventListener('invalid', onInvalidInput);
-
   // 3.
   // Изменение цвета мантии персонажа по нажатию.
   userWizardCoat.addEventListener('click', onCoatClick);
@@ -80,4 +113,8 @@ window.dialog = (function () {
   userWizardEyes.addEventListener('click', onEyesClick);
   // Изменение цвета фаербола по нажатию.
   fireball.addEventListener('click', onFireballClick);
+  // 4.
+  // Перетаскиваем окно диалога
+  setupHandle.addEventListener('mousedown', onHandleMousedown);
+
 })();
