@@ -11,6 +11,13 @@ window.setup = (function () {
   var wizards = [];
   var arrColorCoatTemp = WIZARD_COAT_COLORS.slice();
   var arrColorEyesTemp = WIZARD_EYES_COLORS.slice();
+  var objColorFireball = {
+    '#ee4830': 'rgb(238, 72, 48)',
+    '#30a8ee': 'rgb(48, 168, 238)',
+    '#5ce6c0': 'rgb(92, 230, 192)',
+    '#e848d5': 'rgb(232, 72, 213)',
+    '#e6e848': 'rgb(230, 232, 72)'
+  };
   var userDialog = document.querySelector('.setup');
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
@@ -108,10 +115,13 @@ window.setup = (function () {
   // Объект с экспортируемыми массивами цветов и методами для покраски элементов в диалоге
   return {
     arrColorEyes: WIZARD_EYES_COLORS.slice(),
-    arrColorCoat: WIZARD_COAT_COLORS.forEach(function (elem) {
+    arrColorCoat: WIZARD_COAT_COLORS.map(function (elem) {
       return 'rgb(' + elem + ')';
     }),
-    arrColorFireball: FIREBALL_COLORS.slice(),
+    arrColorFireball: FIREBALL_COLORS.map(function (elem) {
+      return objColorFireball[elem];
+    }),
+
     fillElement: function (elem, color) {
       elem.style.fill = color;
     },
