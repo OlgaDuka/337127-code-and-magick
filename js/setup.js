@@ -9,9 +9,8 @@ window.setup = (function () {
   var MAX_WIZARDS = 4;
   // Переменные
   var wizards = [];
-  var arrColorCoat = WIZARD_COAT_COLORS.slice();
-  var arrColorEyes = WIZARD_EYES_COLORS.slice();
-  var arrColorFireball = FIREBALL_COLORS.slice();
+  var arrColorCoatTemp = WIZARD_COAT_COLORS.slice();
+  var arrColorEyesTemp = WIZARD_EYES_COLORS.slice();
   var userDialog = document.querySelector('.setup');
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
@@ -95,8 +94,8 @@ window.setup = (function () {
   for (var i = 0; i < MAX_WIZARDS; i++) {
     wizards[i] = {
       name: generateName(),
-      coatColor: 'rgb(' + getColorUnic(arrColorCoat) + ')',
-      eyesColor: getColorUnic(arrColorEyes)
+      coatColor: 'rgb(' + getColorUnic(arrColorCoatTemp) + ')',
+      eyesColor: getColorUnic(arrColorEyesTemp)
     };
   }
   // Переносим данные из массива объектов во фрагмент для вставки на страницу
@@ -106,25 +105,18 @@ window.setup = (function () {
   // Добавляем фрагмент на страницу
   similarListElement.appendChild(fragment);
 
-  // Объект с экспортируемыми методами для покраски элементов в диалоге
+  // Объект с экспортируемыми массивами цветов и методами для покраски элементов в диалоге
   return {
-    getColorCoat: function (elem) {
-      if (arrColorCoat.length === 0) {
-        arrColorCoat = WIZARD_COAT_COLORS.slice();
-      }
-      elem.style.fill = 'rgb(' + arrColorCoat.splice(0, 1) + ')';
+    arrColorEyes: WIZARD_EYES_COLORS.slice(),
+    arrColorCoat: WIZARD_COAT_COLORS.forEach(function (elem) {
+      return 'rgb(' + elem + ')';
+    }),
+    arrColorFireball: FIREBALL_COLORS.slice(),
+    fillElement: function (elem, color) {
+      elem.style.fill = color;
     },
-    getColorEyes: function (elem) {
-      if (arrColorEyes.length === 0) {
-        arrColorEyes = WIZARD_EYES_COLORS.slice();
-      }
-      elem.style.fill = arrColorEyes.splice(0, 1);
-    },
-    getColorFireball: function (elem) {
-      if (arrColorFireball.length === 0) {
-        arrColorFireball = FIREBALL_COLORS.slice();
-      }
-      elem.style.background = arrColorFireball.splice(0, 1);
+    changeElementBackground: function (elem, color) {
+      elem.style.backgroundColor = color;
     }
   };
 })();
