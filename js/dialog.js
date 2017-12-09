@@ -52,13 +52,13 @@ window.dialog = (function () {
   };
   // Покраска инвентаря
   var onCoatClick = function () {
-    window.setup.getColorCoat(userWizardCoat);
+    window.colorizeElement(userWizardCoat, userWizardCoat.style.fill, window.setup.arrColorCoat, window.setup.fillElement);
   };
   var onEyesClick = function () {
-    window.setup.getColorEyes(userWizardEyes);
+    window.colorizeElement(userWizardEyes, userWizardEyes.style.fill, window.setup.arrColorEyes, window.setup.fillElement);
   };
   var onFireballClick = function () {
-    window.setup.getColorFireball(fireball);
+    window.colorizeElement(fireball, fireball.style.backgroundColor, window.setup.arrColorFireball, window.setup.changeElementBackground);
   };
   // Таскаем окно
   var onHandleMousedown = function (evt) {
