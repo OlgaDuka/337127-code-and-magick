@@ -1,16 +1,11 @@
 'use strict';
 window.setup = (function () {
 // Константы
-//  var WIZARD_FIRST_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-//  var WIZARD_SUR_NAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
   var WIZARD_COAT_COLORS = ['101, 137, 164', '241, 43, 107', '146, 100, 161', '56, 159, 117', '215, 210, 55', '0, 0, 0'];
   var WIZARD_EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
   var MAX_WIZARDS = 4;
   // Переменные
-  // var wizards = [];
-  // var arrColorCoatTemp = WIZARD_COAT_COLORS.slice();
-  // var arrColorEyesTemp = WIZARD_EYES_COLORS.slice();
   var objColorFireball = {
     '#ee4830': 'rgb(238, 72, 48)',
     '#30a8ee': 'rgb(48, 168, 238)',
@@ -22,30 +17,13 @@ window.setup = (function () {
   var form = userDialog.querySelector('.setup-wizard-form');
   var similarListElement = userDialog.querySelector('.setup-similar-list');
   var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-  // var fragment = document.createDocumentFragment();
   var shop = document.querySelector('.setup-artifacts-shop');
   var draggedItem = null;
   var draggedItemCopy = null;
   var artifactsBag = document.querySelector('.setup-artifacts');
 
   // Функции
-  // Получение случайного целого значения
-  // var getRandomInt = function (minValue, maxValue) {
-  //  return Math.floor(Math.random() * (maxValue - minValue)) + minValue;
-  // };
-  // Получение цвета
-  // var getColorUnic = function (arrColor) {
-  //  return arrColor.splice(getRandomInt(0, arrColor.length), 1);
-  // };
-  // Получение имен магов
-  // var generateName = function () {
-  //  var indexRandom = getRandomInt(0, WIZARD_FIRST_NAMES.length);
-  //  var firstName = WIZARD_FIRST_NAMES.splice(indexRandom, 1);
-  //  var surName = WIZARD_SUR_NAMES.splice(indexRandom, 1);
-  //  return firstName + ' ' + surName;
-  // };
-
-  // Формирование фигурок магов для вывода на страницу - заполнение данными из массива объектов
+  // Формирование фигурок магов для вывода на страницу
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
@@ -54,9 +32,8 @@ window.setup = (function () {
     return wizardElement;
   };
 
-  // Обработка событий
-  // при перетаскивании артефактов из магазина в рюкзачок
-  // Функции
+  // Обработка событий при перетаскивании артефактов из магазина в рюкзачок
+  // Функции для вызова в обработчиках
   // Сообщим магазину, что мы у него утащили (alt в разметке)
   var onShopDragstart = function (evt) {
     if (evt.target.tagName.toLowerCase() === 'img') {
@@ -105,23 +82,8 @@ window.setup = (function () {
   artifactsBag.addEventListener('dragleave', onArtifactDragleave);
   form.addEventListener('submit', onFormSubmit);
 
-  // Реализация
-
-  // Заполняем данными массив объектов магов
-  // for (var i = 0; i < MAX_WIZARDS; i++) {
-  //  wizards[i] = {
-  //    name: generateName(),
-  //    coatColor: 'rgb(' + getColorUnic(arrColorCoatTemp) + ')',
-  //    eyesColor: getColorUnic(arrColorEyesTemp)
-  //  };
-  // }
-  // Переносим данные из массива объектов во фрагмент для вставки на страницу
-  // wizards.forEach(function (elem) {
-  //  fragment.appendChild(renderWizard(elem));
-  // });
-  // Добавляем фрагмент на страницу
-  // similarListElement.appendChild(fragment);
-
+  // Функции обратного вызова для обмена информацией с сервером
+  // Успешное получение данных - рисуем волшебников
   var successHandler = function (wizards) {
     var fragment = document.createDocumentFragment();
     for (var i = 5; i < MAX_WIZARDS + 5; i++) {
@@ -130,7 +92,7 @@ window.setup = (function () {
     similarListElement.appendChild(fragment);
     userDialog.querySelector('.setup-similar').classList.remove('hidden');
   };
-
+  // Ошибка - выводим сообщение для пользователя
   var errorHandler = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 5px auto; text-align: center; background-color: magenta; border: 2px solid black';
@@ -141,7 +103,8 @@ window.setup = (function () {
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
+  // Реализация
+  // Обращение к серверу за данными
   window.backend.load(successHandler, errorHandler);
 
   // Объект с экспортируемыми массивами цветов и методами для покраски элементов в диалоге
